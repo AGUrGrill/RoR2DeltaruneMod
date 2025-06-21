@@ -1,6 +1,6 @@
-﻿using System.Reflection;
-using R2API;
+﻿using R2API;
 using RoR2;
+using System.Reflection;
 using UnityEngine;
 
 namespace DeltarunePlugin
@@ -9,18 +9,13 @@ namespace DeltarunePlugin
     {
         internal static GameObject BigShotPrefab;
         internal static Sprite BigShotIcon;
-
         internal static ItemDef BigShotItemDef;
-
         public static GameObject ItemBodyModelPrefab;
 
         private const string ModPrefix = "@DeltarunePlugin:";
 
         internal static void Init()
         {
-            // First registering your AssetBundle into the ResourcesAPI with a modPrefix that'll also be used for your prefab and icon paths
-            // note that the string parameter of this GetManifestResourceStream call will change depending on
-            // your namespace and file name
             using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("DeltarunePlugin.big_shot")) 
             {
                 var bundle = AssetBundle.LoadFromStream(stream);
@@ -34,27 +29,27 @@ namespace DeltarunePlugin
             AddLanguageTokens();
         }
 
-        internal static ItemDef GetItems()
+        internal static ItemDef GetItems(string name)
         {
-            return BigShotItemDef;
+            if (name == "bigshot") return BigShotItemDef;
+            else return BigShotItemDef; // Fallback Item
         }
 
         private static void BigShotAsLunarTierItem()
         {
             BigShotItemDef = new ItemDef
             {
-                name = "BigShot", // its the internal name, no spaces, apostrophes and stuff like that
-                tier = ItemTier.Tier1,
+                name = "BigShot",
+                tier = ItemTier.Lunar,
                 pickupModelPrefab = BigShotPrefab,
                 pickupIconSprite = BigShotIcon,
-                nameToken = "BIGSHOT_NAME", // stylised name
+                nameToken = "BIGSHOT_NAME",
                 pickupToken = "BIGSHOT_PICKUP",
                 descriptionToken = "BIGSHOT_DESC",
                 loreToken = "BIGSHOT_LORE",
                 tags = new[]
                 {
-                    ItemTag.Utility,
-                    ItemTag.Damage
+                    ItemTag.Utility
                 }
             };
 
@@ -284,7 +279,6 @@ namespace DeltarunePlugin
                 }
             });
           
-
             var bigShot = new R2API.CustomItem(BigShotItemDef, rules);
 
             ItemAPI.Add(bigShot); // ItemAPI sends back the ItemIndex of your item
@@ -295,10 +289,10 @@ namespace DeltarunePlugin
             //The Name should be self explanatory
             LanguageAPI.Add("BIGSHOT_NAME", "[Big Shot]");
             //The Pickup is the short text that appears when you first pick this up. This text should be short and to the point, nuimbers are generally ommited.
-            LanguageAPI.Add("BIGSHOT_PICKUP", "Gain random effect");
+            LanguageAPI.Add("BIGSHOT_PICKUP", "Gain random effect every 10 seconds.");
             //The Description is where you put the actual numbers and give an advanced description.
             LanguageAPI.Add("BIGSHOT_DESC",
-                "Grants <style=cDeath>RAMPAGE</style> on kill. \n<style=cDeath>RAMPAGE</style> : Specifics rewards for reaching kill streaks. \nIncreases <style=cIsUtility>movement speed</style> by <style=cIsUtility>1%</style> <style=cIsDamage>(+1% per item stack)</style> <style=cStack>(+1% every 20 Rampage Stacks)</style>. \nIncreases <style=cIsUtility>damage</style> by <style=cIsUtility>2%</style> <style=cIsDamage>(+2% per item stack)</style> <style=cStack>(+2% every 20 Rampage Stacks)</style>.");
+                "Grants <style=cDeath>[Big Shot]</style> every 10 seconds.\n<style=cDeath>[Big Shot]</style>: Gain a random effect every 10 seconds.\nIncreases by +5 seconds per stack.");
             //The Lore is, well, flavor. You can write pretty much whatever you want here.
             LanguageAPI.Add("BIGSHOT_LORE",
                 "As days became more dull, and bussiness starts to dry, a call comes in. It's your chance... a once in a lifetime chance to become a... [Big Shot].");
