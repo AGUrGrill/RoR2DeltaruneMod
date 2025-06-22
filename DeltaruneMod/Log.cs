@@ -1,6 +1,6 @@
 ﻿using BepInEx.Logging;
 
-namespace DeltarunePlugin
+namespace DeltaruneMod
 {
     internal static class Log
     {
