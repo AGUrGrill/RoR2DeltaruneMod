@@ -8,62 +8,63 @@ using UnityEngine.AddressableAssets;
 
 namespace DeltaruneMod
 {
-    public static class BigShotItem
+    public static class LancerCardItem
     {
-        private static GameObject BigShotPrefab;
-        private static Sprite BigShotIcon;
-        private static ItemDef bigShotItemDef;
+        private static GameObject LancerCardPrefab;
+        private static Sprite LancerCardIcon;
+        private static ItemDef lancerCardItemDef;
 
         public static void Init()
         {
-            using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("DeltaruneMod.big_shot")) 
+            using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("DeltaruneMod.lancer_card")) 
             {
                 var bundle = AssetBundle.LoadFromStream(stream);
 
-                BigShotPrefab = bundle.LoadAsset<GameObject>("Assets/Import/big_shot/big_shot.prefab");
-                BigShotIcon = bundle.LoadAsset<Sprite>("Assets/Import/big_shot_icon/big_shot_icon.png");
+                LancerCardPrefab = bundle.LoadAsset<GameObject>("Assets/Import/lancer_spade/lancer_card.prefab");
+                LancerCardIcon = bundle.LoadAsset<Sprite>("Assets/Import/lancer_spade/lancer_card_icon.png");
             }
 
-            BigShotAsLunarTierItem();
+            LancerCardAsLunarTierItem();
             AddLanguageTokens();
+            LancerCardEffect();
         }
 
         public static void StartTimer()
         {
-            // Every 10 Seconds Check for and Apply [Big Shot]
-            System.Timers.Timer bigShotTimer = new System.Timers.Timer();
-            bigShotTimer.Elapsed += new ElapsedEventHandler(BigShotEffect);
-            bigShotTimer.Interval = 10100;
-            bigShotTimer.Enabled = true;
+            // Every 1 Seconds Check for and delete gold
+            System.Timers.Timer lancerTimer = new System.Timers.Timer();
+            lancerTimer.Elapsed += new ElapsedEventHandler(LancerCardDebuffEffect);
+            lancerTimer.Interval = 1000;
+            lancerTimer.Enabled = true;
         }
 
-        private static void BigShotAsLunarTierItem()
+        private static void LancerCardAsLunarTierItem()
         {
-            bigShotItemDef = ScriptableObject.CreateInstance<ItemDef>();
-            bigShotItemDef.name = "BigShot";
-            bigShotItemDef.tier = ItemTier.Lunar;
-            bigShotItemDef.deprecatedTier = ItemTier.Lunar;
-            bigShotItemDef.pickupModelPrefab = BigShotPrefab;
-            bigShotItemDef.pickupIconSprite = BigShotIcon;
-            bigShotItemDef.nameToken = "BIGSHOT_NAME";
-            bigShotItemDef.pickupToken = "BIGSHOT_PICKUP";
-            bigShotItemDef.descriptionToken = "BIGSHOT_DESC";
-            bigShotItemDef.loreToken = "BIGSHOT_LORE";
-            bigShotItemDef.tags = new[]
+            lancerCardItemDef = ScriptableObject.CreateInstance<ItemDef>();
+            lancerCardItemDef.name = "LancerCard";
+            lancerCardItemDef.tier = ItemTier.Lunar;
+            lancerCardItemDef.deprecatedTier = ItemTier.Lunar;
+            lancerCardItemDef.pickupModelPrefab = LancerCardPrefab;
+            lancerCardItemDef.pickupIconSprite = LancerCardIcon;
+            lancerCardItemDef.nameToken = "LANCERCARD_NAME";
+            lancerCardItemDef.pickupToken = "LANCERCARD_PICKUP";
+            lancerCardItemDef.descriptionToken = "LANCERCARD_DESC";
+            lancerCardItemDef.loreToken = "LANCERCARD_LORE";
+            lancerCardItemDef.tags = new[]
             {
                 ItemTag.Utility
             };
-            bigShotItemDef._itemTierDef = Addressables.LoadAssetAsync<ItemTierDef>("RoR2/Base/Common/LunarDef.asset").WaitForCompletion();
+            lancerCardItemDef._itemTierDef = Addressables.LoadAssetAsync<ItemTierDef>("RoR2/Base/Common/LunarDef.asset").WaitForCompletion();
 
 
-            var itemDisplay = BigShotPrefab.AddComponent<RoR2.ItemDisplay>();
+            var itemDisplay = LancerCardPrefab.AddComponent<RoR2.ItemDisplay>();
             ItemDisplayRuleDict rules = new ItemDisplayRuleDict();
             rules.Add("mdlCommandoDualies", new RoR2.ItemDisplayRule[]
             {
                 new ItemDisplayRule
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
-                    followerPrefab = BigShotPrefab,
+                    followerPrefab = LancerCardPrefab,
                     childName = "Head",
                     localPos = new Vector3(-0.04222F, -0.44262F, 0.35685F),
                     localAngles = new Vector3(11.85053F, 148.0504F, 351.0004F),
@@ -75,7 +76,7 @@ namespace DeltaruneMod
                 new ItemDisplayRule
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
-                    followerPrefab = BigShotPrefab,
+                    followerPrefab = LancerCardPrefab,
                     childName = "Head",
                     localPos = new Vector3(-0.61995F, 0.23677F, 0.12246F),
                     localAngles = new Vector3(50.48947F, 179.8686F, 88.65546F),
@@ -88,7 +89,7 @@ namespace DeltaruneMod
                 new ItemDisplayRule
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
-                    followerPrefab = BigShotPrefab,
+                    followerPrefab = LancerCardPrefab,
                     childName = "Head",
                     localPos = new Vector3(0.75843F, 0.44873F, -5.97378F),
                     localAngles = new Vector3(48.64816F, 311.6693F, 319.3044F),
@@ -101,7 +102,7 @@ namespace DeltaruneMod
                 new ItemDisplayRule
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
-                    followerPrefab = BigShotPrefab,
+                    followerPrefab = LancerCardPrefab,
                     childName = "HeadCenter",
                     localPos = new Vector3(-0.07696F, -0.82386F, 0.0362F),
                     localAngles = new Vector3(350.3063F, 149.1217F, 7.03048F),
@@ -114,7 +115,7 @@ namespace DeltaruneMod
                 new ItemDisplayRule
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
-                    followerPrefab = BigShotPrefab,
+                    followerPrefab = LancerCardPrefab,
                     childName = "Head",
                     localPos = new Vector3(-0.02684F, -0.25777F, 0.1529F),
                     localAngles = new Vector3(0.99506F, 146.1651F, 359.0777F),
@@ -127,7 +128,7 @@ namespace DeltaruneMod
                 new ItemDisplayRule
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
-                    followerPrefab = BigShotPrefab,
+                    followerPrefab = LancerCardPrefab,
                     childName = "Head",
                     localPos = new Vector3(-0.05516F, -0.36669F, 0.19114F),
                     localAngles = new Vector3(0.78083F, 149.236F, 1.34581F),
@@ -140,7 +141,7 @@ namespace DeltaruneMod
                 new ItemDisplayRule
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
-                    followerPrefab = BigShotPrefab,
+                    followerPrefab = LancerCardPrefab,
                     childName = "FlowerBase",
                     localPos = new Vector3(-0.07465F, -1.96628F, 0.74331F),
                     localAngles = new Vector3(3.95929F, 149.5434F, 357.3385F),
@@ -153,7 +154,7 @@ namespace DeltaruneMod
                 new ItemDisplayRule
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
-                    followerPrefab = BigShotPrefab,
+                    followerPrefab = LancerCardPrefab,
                     childName = "Head",
                     localPos = new Vector3(-0.03695F, -0.38561F, 0.19133F),
                     localAngles = new Vector3(358.3326F, 145.6386F, 1.02962F),
@@ -166,7 +167,7 @@ namespace DeltaruneMod
                 new ItemDisplayRule
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
-                    followerPrefab = BigShotPrefab,
+                    followerPrefab = LancerCardPrefab,
                     childName = "Head",
                     localPos = new Vector3(0.31579F, 6.3261F, -2.34545F),
                     localAngles = new Vector3(39.29791F, 216.9755F, 205.7235F),
@@ -179,7 +180,7 @@ namespace DeltaruneMod
                 new ItemDisplayRule
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
-                    followerPrefab = BigShotPrefab,
+                    followerPrefab = LancerCardPrefab,
                     childName = "Head",
                     localPos = new Vector3(-0.04942F, -0.43712F, 0.1296F),
                     localAngles = new Vector3(358.6895F, 151.388F, 1.96694F),
@@ -192,7 +193,7 @@ namespace DeltaruneMod
                 new RoR2.ItemDisplayRule
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
-                    followerPrefab = BigShotPrefab,
+                    followerPrefab = LancerCardPrefab,
                     childName = "Head",
                     localPos = new Vector3(-0.02233F, -0.43605F, 0.13625F),
                     localAngles = new Vector3(359.8591F, 149.4673F, 358.1331F),
@@ -205,7 +206,7 @@ namespace DeltaruneMod
                 new RoR2.ItemDisplayRule
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
-                    followerPrefab = BigShotPrefab,
+                    followerPrefab = LancerCardPrefab,
                     childName = "Head",
                     localPos = new Vector3(0.02105F, -0.87071F, 0.01385F),
                     localAngles = new Vector3(355.2848F, 47.55381F, 355.0908F),
@@ -218,7 +219,7 @@ namespace DeltaruneMod
                 new RoR2.ItemDisplayRule
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
-                    followerPrefab = BigShotPrefab,
+                    followerPrefab = LancerCardPrefab,
                     childName = "Head",
                     localPos = new Vector3(-0.04595F, -0.25266F, 0.13105F),
                     localAngles = new Vector3(3.30229F, 153.9347F, 3.33027F),
@@ -231,7 +232,7 @@ namespace DeltaruneMod
                 new RoR2.ItemDisplayRule
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
-                    followerPrefab = BigShotPrefab,
+                    followerPrefab = LancerCardPrefab,
                     childName = "Head",
                     localPos = new Vector3(-0.0316F, -0.32915F, 0.44771F),
                     localAngles = new Vector3(26.42275F, 153.9711F, 348.9298F),
@@ -244,7 +245,7 @@ namespace DeltaruneMod
                 new RoR2.ItemDisplayRule
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
-                    followerPrefab = BigShotPrefab,
+                    followerPrefab = LancerCardPrefab,
                     childName = "Head",
                     localPos = new Vector3(-0.81985F, 0.20914F, -0.05524F),
                     localAngles = new Vector3(55.56215F, 357.1792F, 266.0527F),
@@ -257,7 +258,7 @@ namespace DeltaruneMod
                 new RoR2.ItemDisplayRule
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
-                    followerPrefab = BigShotPrefab,
+                    followerPrefab = LancerCardPrefab,
                     childName = "Head",
                     localPos = new Vector3(-0.04614F, -0.32434F, 0.20333F),
                     localAngles = new Vector3(4.86292F, 154.7291F, 0.52935F),
@@ -270,7 +271,7 @@ namespace DeltaruneMod
                 new RoR2.ItemDisplayRule
                 {
                     ruleType = ItemDisplayRuleType.ParentedPrefab,
-                    followerPrefab = BigShotPrefab,
+                    followerPrefab = LancerCardPrefab,
                     childName = "Head",
                     localPos = new Vector3(-0.01619F, -0.62815F, 0.30422F),
                     localAngles = new Vector3(4.056F, 154.1342F, 354.7828F),
@@ -279,54 +280,53 @@ namespace DeltaruneMod
                 }
             });
           
-            var bigShot = new R2API.CustomItem(bigShotItemDef, rules);
+            var lancerCard = new R2API.CustomItem(lancerCardItemDef, rules);
 
-            ItemAPI.Add(bigShot); // ItemAPI sends back the ItemIndex of your item
+            ItemAPI.Add(lancerCard); // ItemAPI sends back the ItemIndex of your item
         }
 
         private static void AddLanguageTokens()
         {
             //The Name should be self explanatory
-            LanguageAPI.Add("BIGSHOT_NAME", "[Big Shot]");
+            LanguageAPI.Add("LANCERCARD_NAME", "Jack of Spades");
             //The Pickup is the short text that appears when you first pick this up. This text should be short and to the point, nuimbers are generally ommited.
-            LanguageAPI.Add("BIGSHOT_PICKUP", "Gain a random effect every 10 seconds for 10 seconds...");
+            LanguageAPI.Add("LANCERCARD_PICKUP", "Gain a random effect every 10 seconds for 10 seconds...");
             //The Description is where you put the actual numbers and give an advanced description.
-            LanguageAPI.Add("BIGSHOT_DESC",
+            LanguageAPI.Add("LANCERCARD_DESC",
                 "Grants <style=cDeath>[Big Shot]</style> every 10 seconds.\n<style=cDeath>[Big Shot]</style>: Gain a random effect every 10 seconds.\nIncreases by +5 seconds per stack.");
             //The Lore is, well, flavor. You can write pretty much whatever you want here.
-            LanguageAPI.Add("BIGSHOT_LORE",
-                "As the days became more dull, and bussiness started to dry, a call came in. \"It's your chance... a once in a lifetime chance... to become a <style=cDeath>[Big Shot]</style>.\"");
+            LanguageAPI.Add("LANCERCARD_LORE",
+                "It's just a card, but you do hear a faint hohoho coming from it...");
         }
 
-        private static void BigShotEffect(object source, ElapsedEventArgs e)
+        private static void LancerCardEffect()
         {
             var body = PlayerCharacterMasterController.instances[0].master.GetBody();
+            var master = PlayerCharacterMasterController.instances[0].master;
             if (body.inventory)
             {
-                var itemCount = body.inventory.GetItemCount(bigShotItemDef.itemIndex);
+                var itemCount = body.inventory.GetItemCount(lancerCardItemDef.itemIndex);
                 if (itemCount > 0)
                 {
-                    List<BuffDef> allBuffs = new List<BuffDef>();
-                    FieldInfo[] fields = typeof(RoR2Content.Buffs).GetFields(BindingFlags.Public | BindingFlags.Static);
+                    body.AddBuff(RoR2Content.Buffs.SmallArmorBoost);
+                    body.AddFreeChestBuff();
 
-                    // Add all buffs to list
-                    foreach (var field in fields)
-                    {
-                        if (field.GetValue(null) is BuffDef buffDef)
-                        {
-                            allBuffs.Add(buffDef);
-                        }
-                    }
-
-                    // Get random buff
-                    BuffDef randomBuff = allBuffs[UnityEngine.Random.Range(0, allBuffs.Count)];
-
-                    // Add random buff
-                    body.AddTimedBuff(randomBuff, 8 + ((itemCount - 0) * 5));
-                    Debug.Log($"Added random buff: {randomBuff.name} to {body.name}");
+                    
+                    Debug.Log($"Added lancer effect to {body.name}");
                 }
             }
         }
 
+        private static void LancerCardDebuffEffect(object source, ElapsedEventArgs e)
+        {
+            var body = PlayerCharacterMasterController.instances[0].master.GetBody();
+            var master = PlayerCharacterMasterController.instances[0].master;
+            if (body.inventory)
+            {
+                var moners = master.money;
+                if (moners > 0) master.GiveMoney((uint)(-moners));
+            }
+            
+        }
     }
 }

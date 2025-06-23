@@ -8,10 +8,12 @@
 
 	<ItemGroup>
 	  <None Remove="big_shot" />
+	  <None Remove="lancer_card" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <EmbeddedResource Include="big_shot" />
+	  <EmbeddedResource Include="lancer_card" />
 	</ItemGroup>
 
 	<ItemGroup>
