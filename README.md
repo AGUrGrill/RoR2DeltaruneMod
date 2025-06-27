@@ -1,5 +1,10 @@
 # Deltarune Mod
 
+
+MOD MOVED TO https://github.com/AGUrGrill/Risk-of-Rune-DeltaruneMod
+(This will change in bio of next update on Thunderstore)
+
+
 This mod contains only 3 items currently.
 We plan to add at least 4 more items and a special interactable (featuring your ol' pal Spamton)
 
