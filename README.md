@@ -11,7 +11,11 @@ Items
 Some items models are not attached correctly at this time but we wanted to get the main update out with a couple items we feel happy with so far.
 
 Credit:
+
 agurgrill @ Discord - Programmer
+
 happychaosuser @ Discord - 3D Modeler
+
 segss @ Discord - 3D Modeler
+
 https://x.com/puppycadaver - Icon Artist
